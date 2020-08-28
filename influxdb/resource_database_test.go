@@ -23,6 +23,11 @@ func TestAccInfluxDBDatabase(t *testing.T) {
 					),
 				),
 			},
+			{
+				ResourceName:      "influxdb_database.test",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 }
@@ -44,6 +49,11 @@ func TestAccInfluxDBDatabaseWithRPs(t *testing.T) {
 				),
 			},
 			{
+				ResourceName:      "influxdb_database.rptest",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
 				Config: testAccDatabaseWithRPSUpdateConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckDatabaseExists("influxdb_database.rptest"),
@@ -55,6 +65,11 @@ func TestAccInfluxDBDatabaseWithRPs(t *testing.T) {
 					testAccCheckRetentionPolicy("influxdb_database.rptest", "terraform-rp-test", "12weeks", "2016h0m0s", "1", "", true),
 					testAccCheckRetentionPolicy("influxdb_database.rptest", "terraform-rp-test", "1week", "168h0m0s", "1", "1h0m0s", false),
 				),
+			},
+			{
+				ResourceName:      "influxdb_database.rptest",
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 		},
 	})

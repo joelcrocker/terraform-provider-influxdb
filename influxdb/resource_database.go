@@ -15,6 +15,9 @@ func resourceDatabase() *schema.Resource {
 		Read:   readDatabase,
 		Delete: deleteDatabase,
 		Update: updateDatabase,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -143,6 +146,7 @@ func readDatabase(d *schema.ResourceData, meta interface{}) error {
 
 	for _, result := range resp.Results[0].Series[0].Values {
 		if result[0] == name {
+			d.Set("name", name)
 			readRetentionPolicies(d, meta)
 			return nil
 		}
@@ -156,6 +160,7 @@ func readDatabase(d *schema.ResourceData, meta interface{}) error {
 
 func readRetentionPolicies(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*client.Client)
+	// name := d.Id()
 	name := d.Get("name").(string)
 
 	query := client.Query{
